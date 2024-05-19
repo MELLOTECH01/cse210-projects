@@ -2,11 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+
+// My Quick Web Search:
+// https://www.coursehero.com/sitemap/schools/652-Brigham-Young-University-Idaho/courses/17209031-CSE210/
+// https://stackoverflow.com/questions/77238547/vs-code-simple-console-journal-program-issue
+// https://www.geeksforgeeks.org/how-to-read-and-write-a-text-file-in-c-sharp/
+
 class Entry
 {
-    private string _date;
-    private string _promptText;
-    private string _entryText;
+    public string _date;
+    public string _promptText;
+    public string _entryText;
 
     public Entry(string date, string promptText, string entryText)
     {
@@ -43,32 +49,26 @@ class Journal
         }
     }
 
-    public void SaveToFile(string file)
+    public void SaveToFile(string fileName)
     {
-        using (StreamWriter writer = new StreamWriter(file))
+        using (StreamWriter journalWriter = new StreamWriter(fileName))
         {
             foreach (Entry entry in _entries)
             {
-                writer.WriteLine($"{entry}");
+                journalWriter.WriteLine($"{entry._date}|{entry._promptText}|{entry._entryText}");
             }
         }
     }
 
-    public void LoadFromFile(string file)
+
+    public void LoadFromFile(string fileName)
     {
-        _entries.Clear();
-        using (StreamReader reader = new StreamReader(file))
+        string[] lines = File.ReadAllLines(fileName);
+
+        foreach (string line in lines)
         {
-            while (!reader.EndOfStream)
-            {
-                string[] parts = reader.ReadLine().Split('|');
-                string date = parts[0];
-                string promptText = parts[1];
-                string entryText = parts[2];
-                Entry entry = new Entry(date, promptText, entryText);
-                _entries.Add(entry);
-            }
-        }
+            Console.WriteLine(line);
+        } 
     }
 }
 
@@ -104,10 +104,7 @@ class Program
     static void Main(string[] args)
     {
         // Console.WriteLine("Hello Develop02 World!");
-        // Web pages from which I got help:
-        // https://www.coursehero.com/sitemap/schools/652-Brigham-Young-University-Idaho/courses/17209031-CSE210/
-        // https://stackoverflow.com/questions/77238547/vs-code-simple-console-journal-program-issue
-        // https://www.sololearn.com/en/Discuss
+ 
 
         Console.WriteLine("Welcome to the Journal Program!");
         Journal journal = new Journal();
